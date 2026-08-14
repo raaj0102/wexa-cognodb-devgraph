@@ -11,6 +11,14 @@ DevGraph helps users discover connections between developers, skills, projects, 
 - Which developers worked on projects in the FinTech industry?
 - Which developers have similar skill profiles?
 
+## Live Demo
+
+| Service | URL |
+|---------|-----|
+| **Frontend** | https://wexa-cognodb-devgraph-1.onrender.com |
+| **Backend** | https://wexa-cognodb-devgraph.onrender.com |
+| **Health Check** | https://wexa-cognodb-devgraph.onrender.com/api/health |
+
 ## Why a Graph Database?
 
 Relationship traversal is central to DevGraph. Questions like *"Which developers are connected to FinTech companies through the projects they worked on?"* require chaining multiple entity types:
@@ -220,8 +228,15 @@ Example placeholders:
 COGNODB_URI=
 COGNODB_USERNAME=
 COGNODB_PASSWORD=
-CORS_ALLOWED_ORIGINS=http://localhost:5173,https://your-production-frontend.example.com
+CORS_ALLOWED_ORIGINS=http://localhost:5173,https://wexa-cognodb-devgraph-1.onrender.com
 VITE_API_BASE_URL=http://localhost:8080
+```
+
+For production:
+
+```
+VITE_API_BASE_URL=https://wexa-cognodb-devgraph.onrender.com
+CORS_ALLOWED_ORIGINS=https://wexa-cognodb-devgraph-1.onrender.com
 ```
 
 **Important:** Real credentials must never be committed to version control.
@@ -252,17 +267,46 @@ curl http://localhost:8080/api/developers/dev-001/similar
 
 ## Screenshots
 
-<!-- Add screenshots here before final submission -->
-<!-- Suggested: Home page, Developer profile, Industry explorer, Skill search results -->
-
-_Screenshots to be added._
+| View | Screenshot |
+|------|------------|
+| Home / Developers | ![Home / Developers](docs/screenshots/home.png) |
+| Developer Profile | ![Developer Profile](docs/screenshots/developer-profile.png) |
+| Skill Search | ![Skill Search](docs/screenshots/skill-search.png) |
+| Industry Explorer | ![Industry Explorer](docs/screenshots/industry-explorer.png) |
+| Backend Health Check | ![Backend Health Check](docs/screenshots/health.png) |
 
 ## Deployment
 
-This project is prepared for deployment but **deployment is not yet complete**. Before going live:
+DevGraph is deployed to production on Render.
 
-1. Set production environment variables on the backend host
-2. Set `CORS_ALLOWED_ORIGINS` to your production frontend URL
-3. Set `VITE_API_BASE_URL` to your production backend URL and rebuild the frontend
-4. Run the seed script against your production CognoDB instance
-5. Add screenshots to this README
+- **Backend** — deployed on Render using Docker (Java 17 / Spring Boot 3.3.5)
+- **Frontend** — deployed as a Render Static Site (React / Vite)
+- **Database** — CognoDB (production graph database)
+- **CORS** — production frontend origin configured via `CORS_ALLOWED_ORIGINS`
+- **API communication** — frontend uses `VITE_API_BASE_URL` to reach the deployed backend
+
+### Production Deployment
+
+| Service | URL |
+|---------|-----|
+| Frontend | https://wexa-cognodb-devgraph-1.onrender.com |
+| Backend | https://wexa-cognodb-devgraph.onrender.com |
+
+### Production Verification
+
+The following endpoints have been verified against the deployed backend:
+
+| Endpoint | Result |
+|----------|--------|
+| `GET /api/health` | `status: UP`, `database: CONNECTED` |
+| `GET /api/developers` | 20 developers |
+| `GET /api/developers/search?skill=Java` | Working |
+| `GET /api/projects/search?skill=Java` | Working |
+| `GET /api/explore/industry?industry=FinTech` | Working |
+| Frontend → Backend communication | Working |
+
+Live health check: https://wexa-cognodb-devgraph.onrender.com/api/health
+
+### Local Development
+
+Local setup instructions remain unchanged. See [Backend Setup](#backend-setup) and [Frontend Setup](#frontend-setup) above.
