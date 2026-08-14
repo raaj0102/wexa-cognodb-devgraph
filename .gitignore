@@ -1,0 +1,9 @@
+.env
+target/
+.idea/
+*.iml
+cognodb_credentials.txt
+cp.txt
+frontend/node_modules/
+frontend/dist/
+frontend/.env
